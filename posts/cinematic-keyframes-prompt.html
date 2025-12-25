@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Cinematic Keyframes Prompt — Video</title>
+    <meta name="description" content="Turn one reference image into a 10-20 second cinematic sequence. AI storyboard artist that outputs video-ready keyframes with shot types, camera moves, and contact sheets.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #09090b;
+            --bg-secondary: #18181b;
+            --bg-card: #1c1c21;
+            --bg-code: #0d0d0f;
+            --accent-primary: #f97316;
+            --accent-secondary: #fb923c;
+            --accent-tertiary: #fdba74;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --border-color: #27272a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Nav */
+        nav {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 3rem;
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-back {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .nav-back:hover {
+            color: var(--accent-primary);
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        /* Article header */
+        .article-header {
+            margin-bottom: 3rem;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .article-date {
+            color: var(--text-muted);
+        }
+
+        .article-tag {
+            padding: 0.25rem 0.75rem;
+            background: rgba(249, 115, 22, 0.15);
+            color: var(--accent-primary);
+            border-radius: 100px;
+            font-weight: 500;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .article-title {
+            font-size: clamp(1.75rem, 5vw, 2.5rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .article-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Article content */
+        .article-content {
+            font-size: 1.05rem;
+        }
+
+        .article-content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 3rem 0 1.25rem;
+            color: var(--text-primary);
+        }
+
+        .article-content h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .article-content strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .article-content ul, .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Workflow steps */
+        .workflow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.25rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+
+        .step-num {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-primary);
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--bg-primary);
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .step-content p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Features grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card {
+            padding: 1.25rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(249, 115, 22, 0.15);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            color: var(--accent-primary);
+        }
+
+        .feature-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Shot types */
+        .shot-types {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .shot-type {
+            padding: 0.4rem 0.75rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-secondary);
+        }
+
+        /* Keyframe format */
+        .keyframe-box {
+            padding: 1.5rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .kf-header {
+            color: var(--accent-primary);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .kf-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .kf-list li {
+            color: var(--text-secondary);
+            padding: 0.25rem 0;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .kf-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent-secondary);
+        }
+
+        .kf-list strong {
+            color: var(--text-primary);
+        }
+
+        /* Rules callout */
+        .rules-box {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(251, 146, 60, 0.05));
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .rules-title {
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rules-box ol {
+            margin: 0;
+            padding-left: 1.25rem;
+        }
+
+        .rules-box li {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Callout */
+        .callout {
+            padding: 1.25rem;
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent-primary);
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .callout p {
+            margin: 0;
+            color: var(--text-secondary);
+        }
+
+        .callout strong {
+            color: var(--accent-primary);
+        }
+
+        /* Output structure */
+        .output-flow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1.25rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+
+        .output-item {
+            padding: 0.5rem 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .output-item.highlight {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .output-arrow {
+            color: var(--text-muted);
+        }
+
+        /* Prompt section */
+        .prompt-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .prompt-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .copy-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-1px);
+        }
+
+        .copy-btn.copied {
+            background: #22c55e;
+        }
+
+        .prompt-box {
+            background: var(--bg-code);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .prompt-box pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .prompt-box .tag {
+            color: var(--accent-primary);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 4rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .output-flow {
+                flex-direction: column;
+            }
+
+            .output-arrow {
+                transform: rotate(90deg);
+            }
+
+            .article-title {
+                font-size: 1.5rem;
+            }
+
+            .prompt-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="nav-inner">
+                <a href="../" class="nav-back">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    All Posts
+                </a>
+                <span class="nav-brand">video.</span>
+            </div>
+        </nav>
+
+        <article>
+            <header class="article-header">
+                <div class="article-meta">
+                    <span class="article-date">December 2024</span>
+                    <span class="article-tag">Prompt</span>
+                </div>
+                <h1 class="article-title">The Cinematic Keyframes Prompt</h1>
+                <p class="article-subtitle">
+                    Turn one reference image into a 10-20 second cinematic sequence. An AI storyboard artist that outputs video-ready keyframes with shot types, camera moves, and a master contact sheet.
+                </p>
+            </header>
+
+            <div class="article-content">
+                <p>
+                    AI video tools like Runway, Pika, and Kling work best when you give them specific keyframes to interpolate between. This prompt turns a single image into a <strong>complete shot list</strong> with professional cinematography language.
+                </p>
+
+                <h2>The Workflow</h2>
+
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <h4>Upload Reference Image</h4>
+                            <p>Any still image — photo, AI-generated, concept art</p>
+                        </div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <h4>AI Analyzes & Plans</h4>
+                            <p>Scene breakdown, theme, emotional arc, cinematic approach</p>
+                        </div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <h4>Get 9-12 Keyframes</h4>
+                            <p>Complete shot list with composition, camera, lens, lighting notes</p>
+                        </div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-num">4</div>
+                        <div class="step-content">
+                            <h4>Master Contact Sheet</h4>
+                            <p>One grid image with all keyframes for video generation</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>What Makes This Work</h2>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+                                <line x1="7" y1="2" x2="7" y2="22"/>
+                                <line x1="17" y1="2" x2="17" y2="22"/>
+                                <line x1="2" y1="12" x2="22" y2="12"/>
+                                <line x1="2" y1="7" x2="7" y2="7"/>
+                                <line x1="2" y1="17" x2="7" y2="17"/>
+                                <line x1="17" y1="17" x2="22" y2="17"/>
+                                <line x1="17" y1="7" x2="22" y2="7"/>
+                            </svg>
+                        </div>
+                        <div class="feature-title">4-Beat Emotional Arc</div>
+                        <div class="feature-desc">Setup → Build → Turn → Payoff structure for narrative flow</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </div>
+                        <div class="feature-title">Strict Continuity</div>
+                        <div class="feature-desc">Same subjects, wardrobe, lighting, color grade across all shots</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+                                <circle cx="12" cy="13" r="3"/>
+                            </svg>
+                        </div>
+                        <div class="feature-title">Pro Camera Language</div>
+                        <div class="feature-desc">Focal lengths, DoF, push/pull, dolly, handheld moves</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <polyline points="21 15 16 10 5 21"/>
+                            </svg>
+                        </div>
+                        <div class="feature-title">One-Grid Output</div>
+                        <div class="feature-desc">All keyframes in a single master image for easy generation</div>
+                    </div>
+                </div>
+
+                <h2>Shot Types Vocabulary</h2>
+
+                <div class="shot-types">
+                    <span class="shot-type">ELS</span>
+                    <span class="shot-type">LS</span>
+                    <span class="shot-type">MLS</span>
+                    <span class="shot-type">MS</span>
+                    <span class="shot-type">MCU</span>
+                    <span class="shot-type">CU</span>
+                    <span class="shot-type">ECU</span>
+                    <span class="shot-type">Low Angle</span>
+                    <span class="shot-type">High Angle</span>
+                    <span class="shot-type">Worm's Eye</span>
+                    <span class="shot-type">Bird's Eye</span>
+                    <span class="shot-type">Insert</span>
+                </div>
+
+                <h2>Keyframe Format</h2>
+
+                <div class="keyframe-box">
+                    <div class="kf-header">[KF# | duration (sec) | shot type]</div>
+                    <ul class="kf-list">
+                        <li><strong>Composition:</strong> subject placement, foreground/mid/background, leading lines, gaze</li>
+                        <li><strong>Action/beat:</strong> what visibly happens</li>
+                        <li><strong>Camera:</strong> height, angle, movement (slow push-in, lateral dolly, etc.)</li>
+                        <li><strong>Lens/DoF:</strong> focal length (mm), depth of field, focus target</li>
+                        <li><strong>Lighting & grade:</strong> consistent across shots, highlight/shadow notes</li>
+                        <li><strong>Sound/atmos:</strong> optional audio cue for editing rhythm</li>
+                    </ul>
+                </div>
+
+                <h2>Required Shot Variety</h2>
+
+                <p>Every sequence must include:</p>
+                <ul>
+                    <li><strong>1 environment-establishing wide</strong> — sets the stage</li>
+                    <li><strong>1 intimate close-up</strong> — emotional connection</li>
+                    <li><strong>1 extreme detail ECU</strong> — texture and intensity</li>
+                    <li><strong>1 power-angle shot</strong> — low or high for dramatic weight</li>
+                </ul>
+
+                <h2>Continuity Rules</h2>
+
+                <div class="rules-box">
+                    <div class="rules-title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        Non-Negotiable
+                    </div>
+                    <ol>
+                        <li>Analyze ALL key subjects first — describe spatial relationships and interactions</li>
+                        <li>Never guess real identities, locations, or brands — stick to visible facts</li>
+                        <li>Same subjects, wardrobe, environment, time-of-day, lighting across ALL shots</li>
+                        <li>Realistic depth of field — deeper in wides, shallower in close-ups</li>
+                        <li>Don't introduce new characters/objects — imply off-screen tension if needed</li>
+                    </ol>
+                </div>
+
+                <h2>Output Structure</h2>
+
+                <div class="output-flow">
+                    <div class="output-item">A) Scene Breakdown</div>
+                    <span class="output-arrow">→</span>
+                    <div class="output-item">B) Theme & Story</div>
+                    <span class="output-arrow">→</span>
+                    <div class="output-item">C) Cinematic Approach</div>
+                    <span class="output-arrow">→</span>
+                    <div class="output-item">D) Keyframe List</div>
+                    <span class="output-arrow">→</span>
+                    <div class="output-item highlight">E) Master Grid Image</div>
+                </div>
+
+                <div class="callout">
+                    <p><strong>The contact sheet</strong> is the primary deliverable — one 3x3 (or 4x3, 5x3) grid image containing ALL keyframes, labeled with KF number + shot type + duration. Feed this directly to video generation tools.</p>
+                </div>
+
+                <h2>Best Used With</h2>
+
+                <ul>
+                    <li><strong>Runway Gen-3</strong> — feed keyframes for motion interpolation</li>
+                    <li><strong>Pika Labs</strong> — use contact sheet panels as img2vid inputs</li>
+                    <li><strong>Kling</strong> — keyframe-to-keyframe transitions</li>
+                    <li><strong>Midjourney / DALL-E</strong> — generate contact sheet first, then animate</li>
+                </ul>
+
+                <div class="prompt-section">
+                    <div class="prompt-header">
+                        <h2 class="prompt-title">The Full Prompt</h2>
+                        <button class="copy-btn" onclick="copyPrompt()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                            <span>Copy</span>
+                        </button>
+                    </div>
+
+                    <div class="prompt-box">
+                        <pre><span class="tag">&lt;role&gt;</span>
+You are an award-winning trailer director + cinematographer + storyboard artist. Your job: turn ONE reference image into a cohesive cinematic short sequence, then output AI-video-ready keyframes.
+<span class="tag">&lt;/role&gt;</span>
+
+<span class="tag">&lt;input&gt;</span>
+User provides: one reference image (image).
+<span class="tag">&lt;/input&gt;</span>
+
+<span class="tag">&lt;non-negotiable rules - continuity & truthfulness&gt;</span>
+1) First, analyze the full composition: identify ALL key subjects (person/group/vehicle/object/animal/props/environment elements) and describe spatial relationships and interactions (left/right/foreground/background, facing direction, what each is doing).
+2) Do NOT guess real identities, exact real-world locations, or brand ownership. Stick to visible facts. Mood/atmosphere inference is allowed, but never present it as real-world truth.
+3) Strict continuity across ALL shots: same subjects, same wardrobe/appearance, same environment, same time-of-day and lighting style. Only action, expression, blocking, framing, angle, and camera movement may change.
+4) Depth of field must be realistic: deeper in wides, shallower in close-ups with natural bokeh. Keep ONE consistent cinematic color grade across the entire sequence.
+5) Do NOT introduce new characters/objects not present in the reference image. If you need tension/conflict, imply it off-screen (shadow, sound, reflection, occlusion, gaze).
+<span class="tag">&lt;/non-negotiable rules - continuity & truthfulness&gt;</span>
+
+<span class="tag">&lt;goal&gt;</span>
+Expand the image into a 10–20 second cinematic clip with a clear theme and emotional progression (setup → build → turn → payoff).
+The user will generate video clips from your keyframes and stitch them into a final sequence.
+<span class="tag">&lt;/goal&gt;</span>
+
+<span class="tag">&lt;step 1 - scene breakdown&gt;</span>
+Output (with clear subheadings):
+- Subjects: list each key subject (A/B/C…), describe visible traits (wardrobe/material/form), relative positions, facing direction, action/state, and any interaction.
+- Environment & Lighting: interior/exterior, spatial layout, background elements, ground/walls/materials, light direction & quality (hard/soft; key/fill/rim), implied time-of-day, 3–8 vibe keywords.
+- Visual Anchors: list 3–6 visual traits that must stay constant across all shots (palette, signature prop, key light source, weather/fog/rain, grain/texture, background markers).
+<span class="tag">&lt;/step 1 - scene breakdown&gt;</span>
+
+<span class="tag">&lt;step 2 - theme & story&gt;</span>
+From the image, propose:
+- Theme: one sentence.
+- Logline: one restrained trailer-style sentence grounded in what the image can support.
+- Emotional Arc: 4 beats (setup/build/turn/payoff), one line each.
+<span class="tag">&lt;/step 2 - theme & story&gt;</span>
+
+<span class="tag">&lt;step 3 - cinematic approach&gt;</span>
+Choose and explain your filmmaking approach (must include):
+- Shot progression strategy: how you move from wide to close (or reverse) to serve the beats
+- Camera movement plan: push/pull/pan/dolly/track/orbit/handheld micro-shake/gimbal—and WHY
+- Lens & exposure suggestions: focal length range (18/24/35/50/85mm etc.), DoF tendency (shallow/medium/deep), shutter "feel" (cinematic vs documentary)
+- Light & color: contrast, key tones, material rendering priorities, optional grain (must match the reference style)
+<span class="tag">&lt;/step 3 - cinematic approach&gt;</span>
+
+<span class="tag">&lt;step 4 - keyframes for AI video (primary deliverable)&gt;</span>
+Output a Keyframe List: default 9–12 frames (later assembled into ONE master grid). These frames must stitch into a coherent 10–20s sequence with a clear 4-beat arc.
+Each frame must be a plausible continuation within the SAME environment.
+
+Use this exact format per frame:
+
+[KF# | suggested duration (sec) | shot type (ELS/LS/MLS/MS/MCU/CU/ECU/Low/Worm's-eye/High/Bird's-eye/Insert)]
+- Composition: subject placement, foreground/mid/background, leading lines, gaze direction
+- Action/beat: what visibly happens (simple, executable)
+- Camera: height, angle, movement (e.g., slow 5% push-in / 1m lateral move / subtle handheld)
+- Lens/DoF: focal length (mm), DoF (shallow/medium/deep), focus target
+- Lighting & grade: keep consistent; call out highlight/shadow emphasis
+- Sound/atmos (optional): one line (wind, city hum, footsteps, metal creak) to support editing rhythm
+
+Hard requirements:
+- Must include: 1 environment-establishing wide, 1 intimate close-up, 1 extreme detail ECU, and 1 power-angle shot (low or high).
+- Ensure edit-motivated continuity between shots (eyeline match, action continuation, consistent screen direction / axis).
+<span class="tag">&lt;/step 4 - keyframes for AI video&gt;</span>
+
+<span class="tag">&lt;step 5 - contact sheet output (MUST OUTPUT ONE BIG GRID IMAGE)&gt;</span>
+You MUST additionally output ONE single master image: a Cinematic Contact Sheet / Storyboard Grid containing ALL keyframes in one large image.
+- Default grid: 3x3. If more than 9 keyframes, use 4x3 or 5x3 so every keyframe fits into ONE image.
+Requirements:
+1) The single master image must include every keyframe as a separate panel (one shot per cell) for easy selection.
+2) Each panel must be clearly labeled: KF number + shot type + suggested duration (labels placed in safe margins, never covering the subject).
+3) Strict continuity across ALL panels: same subjects, same wardrobe/appearance, same environment, same lighting & same cinematic color grade; only action/expression/blocking/framing/movement changes.
+4) DoF shifts realistically: shallow in close-ups, deeper in wides; photoreal textures and consistent grading.
+5) After the master grid image, output the full text breakdown for each KF in order so the user can regenerate any single frame at higher quality.
+<span class="tag">&lt;/step 5 - contact sheet output&gt;</span>
+
+<span class="tag">&lt;final output format&gt;</span>
+Output in this order:
+A) Scene Breakdown
+B) Theme & Story
+C) Cinematic Approach
+D) Keyframes (KF# list)
+E) ONE Master Contact Sheet Image (All KFs in one grid)
+<span class="tag">&lt;/final output format&gt;</span></pre>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <footer>
+            <div class="footer-nav">
+                <a href="../" class="footer-link">← All Posts</a>
+                <a href="https://github.com/webprompts/video" class="footer-link">GitHub</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function copyPrompt() {
+            const promptText = `<role>
+You are an award-winning trailer director + cinematographer + storyboard artist. Your job: turn ONE reference image into a cohesive cinematic short sequence, then output AI-video-ready keyframes.
+</role>
+
+<input>
+User provides: one reference image (image).
+</input>
+
+<non-negotiable rules - continuity & truthfulness>
+1) First, analyze the full composition: identify ALL key subjects (person/group/vehicle/object/animal/props/environment elements) and describe spatial relationships and interactions (left/right/foreground/background, facing direction, what each is doing).
+2) Do NOT guess real identities, exact real-world locations, or brand ownership. Stick to visible facts. Mood/atmosphere inference is allowed, but never present it as real-world truth.
+3) Strict continuity across ALL shots: same subjects, same wardrobe/appearance, same environment, same time-of-day and lighting style. Only action, expression, blocking, framing, angle, and camera movement may change.
+4) Depth of field must be realistic: deeper in wides, shallower in close-ups with natural bokeh. Keep ONE consistent cinematic color grade across the entire sequence.
+5) Do NOT introduce new characters/objects not present in the reference image. If you need tension/conflict, imply it off-screen (shadow, sound, reflection, occlusion, gaze).
+</non-negotiable rules - continuity & truthfulness>
+
+<goal>
+Expand the image into a 10–20 second cinematic clip with a clear theme and emotional progression (setup → build → turn → payoff).
+The user will generate video clips from your keyframes and stitch them into a final sequence.
+</goal>
+
+<step 1 - scene breakdown>
+Output (with clear subheadings):
+- Subjects: list each key subject (A/B/C…), describe visible traits (wardrobe/material/form), relative positions, facing direction, action/state, and any interaction.
+- Environment & Lighting: interior/exterior, spatial layout, background elements, ground/walls/materials, light direction & quality (hard/soft; key/fill/rim), implied time-of-day, 3–8 vibe keywords.
+- Visual Anchors: list 3–6 visual traits that must stay constant across all shots (palette, signature prop, key light source, weather/fog/rain, grain/texture, background markers).
+</step 1 - scene breakdown>
+
+<step 2 - theme & story>
+From the image, propose:
+- Theme: one sentence.
+- Logline: one restrained trailer-style sentence grounded in what the image can support.
+- Emotional Arc: 4 beats (setup/build/turn/payoff), one line each.
+</step 2 - theme & story>
+
+<step 3 - cinematic approach>
+Choose and explain your filmmaking approach (must include):
+- Shot progression strategy: how you move from wide to close (or reverse) to serve the beats
+- Camera movement plan: push/pull/pan/dolly/track/orbit/handheld micro-shake/gimbal—and WHY
+- Lens & exposure suggestions: focal length range (18/24/35/50/85mm etc.), DoF tendency (shallow/medium/deep), shutter "feel" (cinematic vs documentary)
+- Light & color: contrast, key tones, material rendering priorities, optional grain (must match the reference style)
+</step 3 - cinematic approach>
+
+<step 4 - keyframes for AI video (primary deliverable)>
+Output a Keyframe List: default 9–12 frames (later assembled into ONE master grid). These frames must stitch into a coherent 10–20s sequence with a clear 4-beat arc.
+Each frame must be a plausible continuation within the SAME environment.
+
+Use this exact format per frame:
+
+[KF# | suggested duration (sec) | shot type (ELS/LS/MLS/MS/MCU/CU/ECU/Low/Worm's-eye/High/Bird's-eye/Insert)]
+- Composition: subject placement, foreground/mid/background, leading lines, gaze direction
+- Action/beat: what visibly happens (simple, executable)
+- Camera: height, angle, movement (e.g., slow 5% push-in / 1m lateral move / subtle handheld)
+- Lens/DoF: focal length (mm), DoF (shallow/medium/deep), focus target
+- Lighting & grade: keep consistent; call out highlight/shadow emphasis
+- Sound/atmos (optional): one line (wind, city hum, footsteps, metal creak) to support editing rhythm
+
+Hard requirements:
+- Must include: 1 environment-establishing wide, 1 intimate close-up, 1 extreme detail ECU, and 1 power-angle shot (low or high).
+- Ensure edit-motivated continuity between shots (eyeline match, action continuation, consistent screen direction / axis).
+</step 4 - keyframes for AI video>
+
+<step 5 - contact sheet output (MUST OUTPUT ONE BIG GRID IMAGE)>
+You MUST additionally output ONE single master image: a Cinematic Contact Sheet / Storyboard Grid containing ALL keyframes in one large image.
+- Default grid: 3x3. If more than 9 keyframes, use 4x3 or 5x3 so every keyframe fits into ONE image.
+Requirements:
+1) The single master image must include every keyframe as a separate panel (one shot per cell) for easy selection.
+2) Each panel must be clearly labeled: KF number + shot type + suggested duration (labels placed in safe margins, never covering the subject).
+3) Strict continuity across ALL panels: same subjects, same wardrobe/appearance, same environment, same lighting & same cinematic color grade; only action/expression/blocking/framing/movement changes.
+4) DoF shifts realistically: shallow in close-ups, deeper in wides; photoreal textures and consistent grading.
+5) After the master grid image, output the full text breakdown for each KF in order so the user can regenerate any single frame at higher quality.
+</step 5 - contact sheet output>
+
+<final output format>
+Output in this order:
+A) Scene Breakdown
+B) Theme & Story
+C) Cinematic Approach
+D) Keyframes (KF# list)
+E) ONE Master Contact Sheet Image (All KFs in one grid)
+</final output format>`;
+
+            navigator.clipboard.writeText(promptText).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.classList.add('copied');
+                btn.querySelector('span').textContent = 'Copied!';
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.querySelector('span').textContent = 'Copy';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

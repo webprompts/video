@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video — AI Video Prompts & Workflows</title>
+    <meta name="description" content="AI video generation prompts and workflows. From storyboards to cinematic sequences.">
+    <meta property="og:title" content="Video — AI Video Prompts & Workflows">
+    <meta property="og:description" content="AI video generation prompts and workflows.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #09090b;
+            --bg-secondary: #18181b;
+            --bg-card: #1c1c21;
+            --accent-primary: #f97316;
+            --accent-secondary: #fb923c;
+            --accent-tertiary: #fdba74;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --border-color: #27272a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        header {
+            padding: 4rem 0 3rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 3rem;
+        }
+
+        .site-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .site-title span {
+            color: var(--accent-primary);
+        }
+
+        .site-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .site-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .site-meta a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .site-meta a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Posts list */
+        .posts {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .post-card {
+            display: block;
+            padding: 1.75rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .post-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(249, 115, 22, 0.15);
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        .post-date {
+            color: var(--text-muted);
+        }
+
+        .post-tag {
+            padding: 0.2rem 0.6rem;
+            background: rgba(249, 115, 22, 0.15);
+            color: var(--accent-primary);
+            border-radius: 100px;
+            font-weight: 500;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .post-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .post-excerpt {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .post-read {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--accent-primary);
+        }
+
+        .post-read svg {
+            transition: transform 0.2s;
+        }
+
+        .post-card:hover .post-read svg {
+            transform: translateX(4px);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 4rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .footer-brand {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .footer-brand a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .footer-brand a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            header {
+                padding: 3rem 0 2rem;
+            }
+
+            .site-title {
+                font-size: 1.5rem;
+            }
+
+            .post-card {
+                padding: 1.25rem;
+            }
+
+            .post-title {
+                font-size: 1.15rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="site-title">video<span>.</span></h1>
+            <p class="site-desc">AI video prompts & workflows. From image to motion.</p>
+            <nav class="site-meta">
+                <a href="https://webprompts.github.io/learn/">← Back to Learn</a>
+                <a href="https://github.com/webprompts/video">GitHub</a>
+            </nav>
+        </header>
+
+        <main class="posts">
+            <a href="posts/cinematic-keyframes-prompt.html" class="post-card">
+                <div class="post-meta">
+                    <span class="post-date">Dec 2024</span>
+                    <span class="post-tag">Prompt</span>
+                </div>
+                <h2 class="post-title">The Cinematic Keyframes Prompt</h2>
+                <p class="post-excerpt">
+                    Turn one reference image into a 10-20 second cinematic sequence. An AI storyboard artist that outputs video-ready keyframes with shot types, camera moves, and a master contact sheet.
+                </p>
+                <span class="post-read">
+                    Read post
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </span>
+            </a>
+
+            <!-- More posts will go here -->
+        </main>
+
+        <footer>
+            <p class="footer-brand">
+                <a href="https://webprompts.github.io/">webprompts</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
